@@ -1,8 +1,9 @@
 create table CDR (
-  cdr_id serial PRIMARY KEY,
+	cdr_id serial PRIMARY KEY,
 	IMSI varchar(25) not null ,
 	MSISDN  varchar(12) not null,
 	start_call varchar(10) not null ,
 	end_call varchar(10) not null ,
+	duration int not null,
 	destination varchar(12) not null 
 )

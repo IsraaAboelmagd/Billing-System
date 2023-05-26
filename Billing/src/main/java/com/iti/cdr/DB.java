@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,7 +20,7 @@ import java.util.logging.Logger;
  */
 public class DB {
     PreparedStatement preparedStatement=null;
-    String sql = new String("insert into CDR (imsi,msisdn,start_call,end_call,destination) values (?,?,?,?,?)");
+    String sql = new String("insert into CDR (imsi,msisdn,start_call,end_call,duration,destination) values (?,?,?,?,?,?)");
      public DB(){
         try {
             DriverManager.registerDriver(new org.postgresql.Driver());
@@ -38,7 +39,13 @@ public class DB {
                   preparedStatement.setString(2, cdr.getMSISDN());
                   preparedStatement.setString(3, cdr.getStart());
                   preparedStatement.setString(4, cdr.getEnd());
-                  preparedStatement.setString(5, cdr.getDistenation());
+                   LocalTime time_start = LocalTime.parse(cdr.getStart());
+                    long start = time_start.toSecondOfDay();
+                     LocalTime time_end = LocalTime.parse(cdr.getEnd());
+                    long end = time_end.toSecondOfDay();
+                    long totalSEconds = end-start;
+                  preparedStatement.setLong(5, totalSEconds);
+                  preparedStatement.setString(6, cdr.getDistenation());
                   preparedStatement.executeUpdate();
               } catch (SQLException ex) {
                   Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
