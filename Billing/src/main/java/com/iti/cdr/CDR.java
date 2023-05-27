@@ -77,7 +77,7 @@ public class CDR {
 
     @Override
     public String toString() {
-        return  IMSI + MSISDN + start + end + distenation ;
+        return  IMSI + MSISDN + start + end + distenation + service;
     }
     
        public static List<CDR> readCDR(){

@@ -1,2 +1,3 @@
 com\iti\billing\Billing.class
+com\iti\cdr\DB.class
 com\iti\cdr\CDR.class
