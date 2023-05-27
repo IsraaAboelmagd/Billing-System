@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  */
 public class DB {
     PreparedStatement preparedStatement=null;
-    String sql = new String("insert into CDR (imsi,msisdn,start_call,end_call,duration,destination) values (?,?,?,?,?,?)");
+    String sql = new String("insert into CDR (imsi,msisdn,start_call,end_call,duration,destination,service) values (?,?,?,?,?,?,?)");
      public DB(){
         try {
             DriverManager.registerDriver(new org.postgresql.Driver());
@@ -47,6 +47,7 @@ public class DB {
                     long totalSEconds = end-start;
                   preparedStatement.setLong(5, totalSEconds);
                   preparedStatement.setString(6, cdr.getDistenation());
+                  preparedStatement.setString(7, cdr.getService());
                   preparedStatement.executeUpdate();
               } catch (SQLException ex) {
                   Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);

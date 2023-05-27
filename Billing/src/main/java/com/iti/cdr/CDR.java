@@ -14,7 +14,15 @@ public class CDR {
     private String start;
     private String end;
     private String distenation;
+    private String service;
 
+    public void setService(String service) {
+        this.service = service;
+    }
+
+    public String getService() {
+        return service;
+    }
     public String getIMSI() {
         return IMSI;
     }
@@ -58,17 +66,18 @@ public class CDR {
         this.distenation = distenation;
     }
 
-    public CDR(String IMSI, String MSISDN, String start, String end, String distenation) {
+    public CDR(String IMSI, String MSISDN, String start, String end, String distenation ,String service) {
         this.IMSI = IMSI;
         this.MSISDN = MSISDN;
         this.start = start;
         this.end = end;
         this.distenation = distenation;
+        this.service = service;
     }
 
     @Override
     public String toString() {
-        return  IMSI + MSISDN + start + end + distenation ;
+        return  IMSI + MSISDN + start + end + distenation + service;
     }
     
        public static List<CDR> readCDR(){
@@ -100,6 +109,6 @@ public class CDR {
         private static CDR createOneCDR(String[] metadata) 
     {
 //        String imsi=metadata[0];
-      return new CDR(metadata[0], metadata[1],metadata[2],metadata[3], metadata[4]);
+      return new CDR(metadata[0], metadata[1],metadata[2],metadata[3], metadata[4],metadata[5]);
     }
 }
