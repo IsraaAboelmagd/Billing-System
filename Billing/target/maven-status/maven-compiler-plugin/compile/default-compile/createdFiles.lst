@@ -1,2 +1,4 @@
-com\iti\billing\Billing.class
+com\iti\billing\BillGenerating.class
 com\iti\cdr\CDR.class
+com\iti\billing\Billing.class
+com\iti\cdr\DB.class
