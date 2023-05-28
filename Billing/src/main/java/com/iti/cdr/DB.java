@@ -21,11 +21,13 @@ import java.util.logging.Logger;
  */
 public class DB {
     PreparedStatement preparedStatement=null;
-    String sql = new String("insert into CDR (imsi,msisdn,start_call,end_call,duration,destination,service) values (?,?,?,?,?,?,?)");
+    String sql = new String("insert into cdr (imsi,msisdn,start_call,end_call,duration,destination,sncode) values (?,?,?,?,?,?,?)");
      public DB(){
         try {
-            DriverManager.registerDriver(new org.postgresql.Driver());
-            Connection con = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/postgres","postgres","15987");
+//            DriverManager.registerDriver(new org.postgresql.Driver());
+            Connection con = new Connnectiontodatabase().connect();
+//                    DriverManager.getConnection("jdbc:postgresql://127.0.0.1/postgres","postgres","15987");
+            
             preparedStatement = con.prepareStatement(sql);
             
         } catch (SQLException ex) {

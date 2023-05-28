@@ -1,10 +1,7 @@
-<<<<<<< HEAD
-C:\Users\Aisha\Desktop\Billing-System\Billing\src\main\java\com\iti\billing\Billing.java
-C:\Users\Aisha\Desktop\Billing-System\Billing\src\main\java\com\iti\cdr\DB.java
-C:\Users\Aisha\Desktop\Billing-System\Billing\src\main\java\com\iti\cdr\CDR.java
-C:\Users\Aisha\Desktop\Billing-System\Billing\src\main\java\com\iti\billing\BillGenerating.java
-=======
-D:\ITI\Billing\Billing\src\main\java\com\iti\cdr\DB.java
-D:\ITI\Billing\Billing\src\main\java\com\iti\billing\Billing.java
-D:\ITI\Billing\Billing\src\main\java\com\iti\cdr\CDR.java
->>>>>>> cedcbc351aec781e60b03c9e9203ac0b4786e0c3
+C:\Users\hp\Desktop\Billing\Billing-System\Billing\src\main\java\com\iti\billing\User.java
+C:\Users\hp\Desktop\Billing\Billing-System\Billing\src\main\java\com\iti\cdr\DB.java
+C:\Users\hp\Desktop\Billing\Billing-System\Billing\src\main\java\com\iti\rating\Rating.java
+C:\Users\hp\Desktop\Billing\Billing-System\Billing\src\main\java\com\iti\billing\Billing.java
+C:\Users\hp\Desktop\Billing\Billing-System\Billing\src\main\java\com\iti\cdr\CDR.java
+C:\Users\hp\Desktop\Billing\Billing-System\Billing\src\main\java\com\iti\cdr\Connnectiontodatabase.java
+C:\Users\hp\Desktop\Billing\Billing-System\Billing\src\main\java\com\iti\billing\BillGenerating.java
