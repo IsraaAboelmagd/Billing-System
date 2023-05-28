@@ -43,8 +43,9 @@ public class DB {
                     long start = time_start.toSecondOfDay();
                      LocalTime time_end = LocalTime.parse(cdr.getEnd());
                     long end = time_end.toSecondOfDay();
-                    long totalSEconds = end-start;
-                  preparedStatement.setLong(5, totalSEconds);
+                    long totalSeconds = end-start;
+                    long totalMinutes = (totalSeconds + 59) / 60;
+                  preparedStatement.setLong(5, totalMinutes);
                   preparedStatement.setString(6, cdr.getDistenation());
                   preparedStatement.setString(7, cdr.getService());
                   preparedStatement.executeUpdate();
