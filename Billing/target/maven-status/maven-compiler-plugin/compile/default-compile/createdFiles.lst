@@ -1,5 +1,6 @@
 com\iti\billing\BillGenerating.class
 com\iti\billing\User.class
+another.class
 com\iti\cdr\CDR.class
 com\iti\rating\Rating.class
 com\iti\billing\Billing.class

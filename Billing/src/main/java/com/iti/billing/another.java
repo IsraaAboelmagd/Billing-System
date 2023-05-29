@@ -16,9 +16,11 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.chart.ChartUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -30,56 +32,35 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import org.jfree.chart.ChartUtils;
-import org.jfree.chart.plot.PiePlot;
-import org.jfree.data.general.DefaultPieDataset;
 
-public class BillGenerating {
+public class another {
 
     public static void main(String[] args) {
-        try { 
-            List<User> users = getUsersFromDB(); 
-
-            PDDocument document = new PDDocument();
+        try (PDDocument document = new PDDocument()) {
+            List<User> users = getUsersFromDB();
+//             System.out.println("****"+users.get(0));
             for (User user : users) {
+                System.out.println("-----------"+user.getName());
                 PDPage page = new PDPage(PDRectangle.A4);
                 document.addPage(page);
 
-                PDPageContentStream contentStream = new PDPageContentStream(document, page);
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+                try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
 
-                float margin = 50;
-                float startY = page.getMediaBox().getHeight() - margin;
-                float endY = margin;
+                    float margin = 50;
+                    float startY = page.getMediaBox().getHeight() - margin;
+                    float endY = margin;
 
-                generateBillTable(contentStream, startY, endY, user);
-   generateUsageChart(document);
-                contentStream.close();
+                    generateBillTable(contentStream, startY, endY, user);
+                    generateUsageChart(document, user);
+                }
             }
-//            String outputPath = "bill4.pdf";
-//try {
-//    document.save(outputPath);
-//    System.out.println("PDF generated successfully at: " + outputPath);
-//} catch (IOException e) {
-//    e.printStackTrace();
-//}
-try {
-    // Your existing code for PDF generation
-    // ...
-    document.save("bill4.pdf");
-    document.close();
-    System.out.println("PDF generated successfully.");
-} catch (IOException e) {
-    e.printStackTrace();
-}
-
-
-         
-            document.close();
+            document.save("bill4.pdf");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     private static void generateBillTable(PDPageContentStream contentStream, float startY, float endY, User user) throws IOException {
         // Define the table parameters
@@ -110,8 +91,6 @@ try {
 
     private static void drawTableHeader(PDPageContentStream contentStream, float tableWidth, float currentPosition, float tableMargin, float cellMargin, float[] colWidths) throws IOException {
         contentStream.setNonStrokingColor(Color.BLACK);
-
-      
         contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
 
         float cellHeight = 20;
@@ -120,19 +99,17 @@ try {
         float currentYPosition = currentPosition;
 
         // Draw the headers
-        String[] headers = {"Name", "Mobile Number", "Email", "address","Total Cost"};
+        String[] headers = {"Name", "Mobile Number", "Email", "Address", "Total Cost"};
         for (int i = 0; i < colWidths.length; i++) {
             contentStream.addRect(currentXPosition, currentYPosition, colWidths[i], cellHeight);
             contentStream.fill();
 
-
-           
             contentStream.beginText();
-             contentStream.setNonStrokingColor(Color.PINK);
+            contentStream.setNonStrokingColor(Color.PINK);
             contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
             contentStream.newLineAtOffset(currentXPosition + cellMargin, currentYPosition + cellHeight / 2 - 4);
             contentStream.showText(headers[i]);
-             contentStream.setNonStrokingColor(Color.BLACK);
+            contentStream.setNonStrokingColor(Color.BLACK);
             contentStream.endText();
 
             // Move to the next cell position
@@ -146,7 +123,7 @@ try {
         float cellHeight = 20;
         float currentXPosition = tableMargin;
         float currentYPosition = currentPosition;
-        String[] data = {user.getName(), user.getMobileNumber(), user.getEmail(), String.valueOf(user.getTotalcost()), user.getAddress()};
+        String[] data = {user.getName(), user.getMobileNumber(), user.getEmail(), user.getAddress(), String.valueOf(user.getTotalcost())};
         for (int i = 0; i < columnWidths.length; i++) {
             contentStream.addRect(currentXPosition, currentYPosition, columnWidths[i], cellHeight);
             contentStream.stroke();
@@ -165,37 +142,32 @@ try {
         contentStream.stroke();
     }
 
-
-     private static void generateUsageChart(PDDocument document) throws IOException {
+    private static void generateUsageChart(PDDocument document, User user) throws IOException {
         DefaultPieDataset dataset = new DefaultPieDataset();
         dataset.setValue("Voice Calls", 40);
         dataset.setValue("Data", 60);
         dataset.setValue("SMS", 10);
- 
 
-        JFreeChart chart = ChartFactory.createPieChart("Usage Chart for this month", dataset);
-        
+        JFreeChart chart = ChartFactory.createPieChart("Usage Chart for " + user.getName(), dataset);
 
         chart.setBackgroundPaint(new Color(255, 192, 203, 0));
-         PiePlot plot =(PiePlot) chart.getPlot();
-         plot.setSectionPaint("Voice Calls", Color.pink);
-         plot.setSectionPaint("Data", Color.cyan);
+        PiePlot plot = (PiePlot) chart.getPlot();
+        plot.setSectionPaint("Voice Calls", Color.PINK);
+        plot.setSectionPaint("Data", Color.CYAN);
 
         int width = 500;
         int height = 250;
 
-        java.awt.Image awtImage = chart.createBufferedImage(width, height);
+        BufferedImage bufferedImage = chart.createBufferedImage(width, height);
 
-        PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, ChartUtils.encodeAsPNG((BufferedImage) awtImage), "chart");
-        PDPage page = document.getPage(0);
+        PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, ChartUtils.encodeAsPNG(bufferedImage), "chart");
+        PDPage page = document.getPage(document.getNumberOfPages() - 1);
         PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true, true);
         contentStream.drawImage(pdImage, 50, 300, width, height);
         contentStream.close();
     }
 
-
-
-private static List<User> getUsersFromDB() {
+    private static List<User> getUsersFromDB() {
     List<User> users = new ArrayList<>();
 
     // JDBC connection parameters
@@ -229,6 +201,4 @@ private static List<User> getUsersFromDB() {
 
     return users;
 }
-
-
 }
